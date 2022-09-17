@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX - JSON</title>
+  </head>
+  <body>
+    <button id="button1">GET USER</button>
+    <button id="button2">GET USERS</button>
+    <br />
+    <h1>User</h1>
+    <div>
+      <h2 id="user"></h2>
+    </div>
+    <h1>Users</h1>
+    <div id="users"></div>
+
+    <script>
+      const btn1 = document.getElementById("button1");
+      const btn2 = document.getElementById("button2");
+
+      var user = document.getElementById("user");
+      var users = document.getElementById("users");
+
+      btn1.addEventListener("click", loadUser);
+      btn2.addEventListener("click", loadUsers);
+      function loadUser() {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          if (this.status === 200) {
+            var dataUser = JSON.parse(this.responseText);
+            user.innerHTML = "Name: " + dataUser.name;
+          }
+        };
+
+        xhr.open("GET", "user.json", true);
+        xhr.send();
+      }
+
+      function loadUsers() {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          if (this.status === 200) {
+            var dataUsers = JSON.parse(this.responseText);
+            var output = "";
+            for (user of dataUsers) {
+              output += `
+              <ul> 
+                    <li>ID: ${user.id}</li> 
+                    <li>NAME: ${user.name}</li>
+                    <li>EMAIL: ${user.email}</li>
+               </ul>
+               `;
+            }
+            users.innerHTML = output;
+          }
+        };
+
+        xhr.open("GET", "users.json", true);
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
